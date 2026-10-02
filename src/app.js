@@ -159,26 +159,34 @@ function createHieroglyphCard(glyph) {
         '개념': '💭'
     };
 
+    const historicalHTML = glyph.historicalContext
+        ? `<p class="historical-context"><strong>역사 배경:</strong> ${glyph.historicalContext}</p>`
+        : '';
+
     card.innerHTML = `
         <div class="card-image">${imageEmoji[glyph.category] || '📜'}</div>
         <div class="card-content">
             <h3>${glyph.name}</h3>
             <span class="category">${glyph.category}</span>
-            ${isLearned ? '<span style="color: #28a745; font-weight: bold;">✓ 학습함</span>' : ''}
+            ${isLearned ? '<span class="learned-badge">✓ 학습함</span>' : ''}
             <p><strong>의미:</strong> ${glyph.meaning}</p>
             <p><span class="pronunciation">발음:</span> ${glyph.pronunciation}</p>
             <p class="description">${glyph.description}</p>
             <p><em>${glyph.example}</em></p>
+            ${historicalHTML}
         </div>
     `;
 
     // 카드 클릭 시 학습 마크
     card.addEventListener('click', () => {
         markHieroglyphAsLearned(glyph.id);
-        card.innerHTML = card.innerHTML.replace(
-            '${isLearned ? \'<span style="color: #28a745; font-weight: bold;">✓ 학습함</span>\' : \'\'}',
-            '<span style="color: #28a745; font-weight: bold;">✓ 학습함</span>'
-        );
+        const learnedBadge = card.querySelector('.learned-badge');
+        if (!learnedBadge) {
+            const newBadge = createElement('span', 'learned-badge');
+            newBadge.textContent = '✓ 학습함';
+            const categorySpan = card.querySelector('.category');
+            categorySpan.parentElement.insertBefore(newBadge, categorySpan.nextSibling);
+        }
         updateProgressDisplay();
         logSuccess(`"${glyph.name}" 글자를 학습 마크했습니다.`);
     });
@@ -197,8 +205,9 @@ function prepareQuizData() {
         return;
     }
 
-    // 무작위로 5개 문제 선택
-    quizData = getRandomItems(hieroglyphs, Math.min(5, hieroglyphs.length));
+    // 무작위로 10개 문제 선택 (최대 데이터 개수까지)
+    const quizCount = Math.min(10, hieroglyphs.length);
+    quizData = getRandomItems(hieroglyphs, quizCount);
     currentQuizIndex = 0;
     displayQuizQuestion();
 }

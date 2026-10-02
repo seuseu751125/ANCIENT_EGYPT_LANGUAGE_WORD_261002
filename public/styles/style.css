@@ -537,6 +537,153 @@ header.header .subtitle {
     box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
+/* ========== 스트릭 섹션 ========== */
+.profile-streak-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFA500 100%);
+    border-radius: 8px;
+    color: white;
+}
+
+.profile-streak-section h3 {
+    color: white;
+    margin: 0 0 20px 0;
+    font-size: 1.3em;
+}
+
+.streak-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.streak-card {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.streak-card h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.95em;
+    opacity: 0.95;
+}
+
+.streak-value {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== 배지 섹션 ========== */
+.profile-badges-section {
+    margin-bottom: 30px;
+}
+
+.profile-badges-section h3 {
+    color: #8B4513;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #D2B48C;
+    padding-bottom: 10px;
+}
+
+.badges-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    min-height: 150px;
+}
+
+.badge-item {
+    background-color: #f9f5f0;
+    border: 2px solid #D2B48C;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.badge-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+    border-color: #8B4513;
+}
+
+.badge-item.unlocked {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: #FF8C00;
+    box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+}
+
+.badge-item.locked {
+    opacity: 0.5;
+    background-color: #e8e8e8;
+    border-color: #ccc;
+}
+
+.badge-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.badge-name {
+    font-weight: 600;
+    color: #8B4513;
+    font-size: 0.85em;
+    margin-bottom: 5px;
+}
+
+.badge-item.unlocked .badge-name {
+    color: #8B4513;
+}
+
+.badge-item.locked .badge-name {
+    color: #999;
+}
+
+.badge-description {
+    font-size: 0.75em;
+    color: #666;
+}
+
+.badge-item.unlocked .badge-description {
+    color: #555;
+}
+
+.badge-item.locked .badge-description {
+    color: #999;
+}
+
+.achievements-info {
+    background-color: #f0f8ff;
+    border-left: 4px solid #8B4513;
+    padding: 15px;
+    border-radius: 4px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.achievements-info p {
+    margin: 0;
+}
+
+/* ========== 반응형 ========== */
+@media (max-width: 768px) {
+    .streak-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .badges-container {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
 /* ========== 푸터 ========== */
 footer.footer {
     background-color: #8B4513;

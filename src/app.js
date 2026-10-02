@@ -31,6 +31,7 @@ async function initializeApp() {
         // 초기 데이터 표시
         displayHieroglyphs();
         updateProgressDisplay();
+        updateProfilePage();
 
         logSuccess('앱 초기화 완료!');
     } catch (error) {
@@ -106,6 +107,11 @@ function handleTabClick(event) {
     // 퀴즈 탭 클릭 시 퀴즈 데이터 준비
     if (tabName === 'quiz' && quizData.length === 0) {
         prepareQuizData();
+    }
+
+    // 프로필 탭 클릭 시 프로필 정보 업데이트
+    if (tabName === 'profile') {
+        updateProfilePage();
     }
 }
 
@@ -224,6 +230,7 @@ function createHieroglyphCard(glyph) {
             categorySpan.parentElement.insertBefore(newBadge, categorySpan.nextSibling);
         }
         updateProgressDisplay();
+        updateProfilePage();
         logSuccess(`"${glyph.name}" 글자를 학습 마크했습니다.`);
     });
 
@@ -352,6 +359,9 @@ function displayQuizComplete() {
         </div>
     `;
 
+    // 프로필 데이터 업데이트 (배지 unlock 확인)
+    updateProfilePage();
+
     quizData = [];
 }
 
@@ -444,6 +454,12 @@ function updateProfilePage() {
 
     // 카테고리별 진행률 업데이트
     updateCategoryProgress();
+
+    // 배지 표시 업데이트
+    displayBadges();
+
+    // 스트릭 정보 업데이트
+    updateStreakDisplay();
 }
 
 /**
@@ -509,4 +525,54 @@ function updateCategoryProgress() {
     });
 
     categoryStatsEl.innerHTML = html;
+}
+
+/**
+ * 배지 표시 업데이트
+ */
+function displayBadges() {
+    const badgesContainer = document.getElementById('badges-container');
+    if (!badgesContainer) return;
+
+    const progress = getUserProgress();
+    const unlockedBadges = getUnlockedBadges(progress);
+    const unlockedIds = unlockedBadges.map(b => b.id);
+
+    let badgesHTML = '';
+
+    // 획득한 배지 표시
+    for (const badgeKey in BADGES) {
+        const badge = BADGES[badgeKey];
+        const isUnlocked = unlockedIds.includes(badge.id);
+
+        badgesHTML += `
+            <div class="badge-item ${isUnlocked ? 'unlocked' : 'locked'}">
+                <div class="badge-icon">${badge.icon}</div>
+                <h4 class="badge-name">${badge.name}</h4>
+                <p class="badge-description">${badge.description}</p>
+            </div>
+        `;
+    }
+
+    badgesContainer.innerHTML = badgesHTML;
+    saveUserBadges(progress);
+}
+
+/**
+ * 스트릭 정보 업데이트
+ */
+function updateStreakDisplay() {
+    const progress = getUserProgress();
+    const currentStreakEl = document.getElementById('current-streak');
+    const maxStreakEl = document.getElementById('max-streak');
+
+    const currentStreak = getCurrentStreak(progress.quizAttempts);
+    const maxStreak = getMaxStreak(progress.quizAttempts);
+
+    if (currentStreakEl) {
+        currentStreakEl.textContent = currentStreak;
+    }
+    if (maxStreakEl) {
+        maxStreakEl.textContent = maxStreak;
+    }
 }

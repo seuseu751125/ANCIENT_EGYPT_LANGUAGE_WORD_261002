@@ -289,3 +289,140 @@ function logWarning(message) {
 function logError(message) {
     console.error('❌ ERROR:', message);
 }
+
+// ========== 게임화 시스템 ==========
+
+/**
+ * 배지 목록 정의
+ */
+const BADGES = {
+    FIRST_STEP: {
+        id: 'first_step',
+        name: '🎯 첫 걸음',
+        description: '첫 글자를 학습했습니다',
+        condition: (progress) => progress.learnedHieroglyphs.length >= 1,
+        icon: '🎯'
+    },
+    LEARNER: {
+        id: 'learner',
+        name: '📚 학습자',
+        description: '10개의 글자를 학습했습니다',
+        condition: (progress) => progress.learnedHieroglyphs.length >= 10,
+        icon: '📚'
+    },
+    SCHOLAR: {
+        id: 'scholar',
+        name: '🧠 학자',
+        description: '20개의 글자를 학습했습니다',
+        condition: (progress) => progress.learnedHieroglyphs.length >= 20,
+        icon: '🧠'
+    },
+    MASTER: {
+        id: 'master',
+        name: '👑 마스터',
+        description: '모든 글자를 학습했습니다',
+        condition: (progress) => progress.learnedHieroglyphs.length >= 30,
+        icon: '👑'
+    },
+    QUIZ_STARTER: {
+        id: 'quiz_starter',
+        name: '🎮 퀴즈 시작',
+        description: '첫 퀴즈를 풀었습니다',
+        condition: (progress) => progress.quizAttempts.length >= 1,
+        icon: '🎮'
+    },
+    QUIZ_MASTER: {
+        id: 'quiz_master',
+        name: '🏆 퀴즈 챔피언',
+        description: '50개의 퀴즈를 풀었습니다',
+        condition: (progress) => progress.quizAttempts.length >= 50,
+        icon: '🏆'
+    },
+    HIGH_SCORER: {
+        id: 'high_scorer',
+        name: '⭐ 고득점자',
+        description: '100점 이상을 획득했습니다',
+        condition: (progress) => progress.totalScore >= 100,
+        icon: '⭐'
+    },
+    PERFECT_QUIZ: {
+        id: 'perfect_quiz',
+        name: '💯 완벽한 정답',
+        description: '한 번에 10개 문제를 모두 맞혔습니다',
+        condition: (progress) => {
+            if (progress.quizAttempts.length < 10) return false;
+            const lastTenAttempts = progress.quizAttempts.slice(-10);
+            return lastTenAttempts.every(attempt => attempt.correct);
+        },
+        icon: '💯'
+    }
+};
+
+/**
+ * 사용자가 획득한 배지 확인
+ * @param {object} progress - 사용자 진행도
+ * @returns {array} - 획득한 배지 목록
+ */
+function getUnlockedBadges(progress) {
+    const unlocked = [];
+    for (const badgeKey in BADGES) {
+        const badge = BADGES[badgeKey];
+        if (badge.condition(progress)) {
+            unlocked.push(badge);
+        }
+    }
+    return unlocked;
+}
+
+/**
+ * 사용자 배지 저장
+ * @param {object} progress - 사용자 진행도
+ */
+function saveUserBadges(progress) {
+    const unlocked = getUnlockedBadges(progress);
+    const badgeIds = unlocked.map(b => b.id);
+    progress.unlockedBadges = badgeIds;
+    saveToStorage('userProgress', progress);
+}
+
+/**
+ * 연속 정답 스트릭 계산
+ * @param {array} quizAttempts - 퀴즈 시도 목록
+ * @returns {number} - 현재 스트릭
+ */
+function getCurrentStreak(quizAttempts) {
+    if (quizAttempts.length === 0) return 0;
+
+    let streak = 0;
+    for (let i = quizAttempts.length - 1; i >= 0; i--) {
+        if (quizAttempts[i].correct) {
+            streak++;
+        } else {
+            break;
+        }
+    }
+    return streak;
+}
+
+/**
+ * 최고 스트릭 계산
+ * @param {array} quizAttempts - 퀴즈 시도 목록
+ * @returns {number} - 최고 스트릭
+ */
+function getMaxStreak(quizAttempts) {
+    if (quizAttempts.length === 0) return 0;
+
+    let maxStreak = 0;
+    let currentStreak = 0;
+
+    for (const attempt of quizAttempts) {
+        if (attempt.correct) {
+            currentStreak++;
+            maxStreak = Math.max(maxStreak, currentStreak);
+        } else {
+            currentStreak = 0;
+        }
+    }
+
+    return maxStreak;
+}

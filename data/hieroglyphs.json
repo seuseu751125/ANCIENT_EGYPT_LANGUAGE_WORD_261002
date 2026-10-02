@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Aleph (알레프)",
+    "meaning": "소, 황소",
+    "pronunciation": "ȝ",
+    "category": "동물",
+    "description": "고대 이집트에서 가축을 나타내는 가장 중요한 상형문자 중 하나",
+    "example": "부의 상징으로 사용되었습니다.",
+    "image": "aleph.png"
+  },
+  {
+    "id": 2,
+    "name": "Bet (벳)",
+    "meaning": "다리, 발",
+    "pronunciation": "b",
+    "category": "신체",
+    "description": "인간의 다리나 발을 나타내는 상형문자",
+    "example": "걷기나 움직임을 표현할 때 사용되었습니다.",
+    "image": "bet.png"
+  },
+  {
+    "id": 3,
+    "name": "Gimel (기멜)",
+    "meaning": "낙타",
+    "pronunciation": "g",
+    "category": "동물",
+    "description": "사막을 이동할 때 사용되던 낙타를 나타내는 글자",
+    "example": "여행이나 장거리 이동을 상징합니다.",
+    "image": "gimel.png"
+  },
+  {
+    "id": 4,
+    "name": "Daleth (달레스)",
+    "meaning": "문, 입구",
+    "pronunciation": "d",
+    "category": "건축",
+    "description": "집이나 신전의 문을 나타내는 상형문자",
+    "example": "진입, 시작, 기회를 나타낼 때 사용되었습니다.",
+    "image": "daleth.png"
+  },
+  {
+    "id": 5,
+    "name": "He (헤)",
+    "meaning": "숨, 생명의 호흡",
+    "pronunciation": "h",
+    "category": "개념",
+    "description": "생명의 호흡과 영혼을 나타내는 영적 상형문자",
+    "example": "영혼이나 생명력을 표현하는 데 사용되었습니다.",
+    "image": "he.png"
+  },
+  {
+    "id": 6,
+    "name": "Vav (바브)",
+    "meaning": "못, 갈고리",
+    "pronunciation": "w",
+    "category": "도구",
+    "description": "건축이나 연결을 나타내는 금속 못 또는 갈고리",
+    "example": "연결, 결합, 고정을 의미했습니다.",
+    "image": "vav.png"
+  },
+  {
+    "id": 7,
+    "name": "Zayin (자인)",
+    "meaning": "무기, 칼",
+    "pronunciation": "z",
+    "category": "도구",
+    "description": "전투와 방어를 나타내는 무기 상형문자",
+    "example": "전쟁, 보호, 힘을 상징했습니다.",
+    "image": "zayin.png"
+  },
+  {
+    "id": 8,
+    "name": "Het (헷)",
+    "meaning": "울타리",
+    "pronunciation": "ḥ",
+    "category": "건축",
+    "description": "보호와 경계를 나타내는 울타리 모양의 글자",
+    "example": "보호, 안전, 경계를 표현할 때 사용되었습니다.",
+    "image": "het.png"
+  },
+  {
+    "id": 9,
+    "name": "Tet (텟)",
+    "meaning": "빵",
+    "pronunciation": "ṭ",
+    "category": "음식",
+    "description": "일상 생활의 필수 음식인 빵을 나타내는 글자",
+    "example": "음식, 생존, 일상을 상징했습니다.",
+    "image": "tet.png"
+  },
+  {
+    "id": 10,
+    "name": "Yod (욧)",
+    "meaning": "손",
+    "pronunciation": "y",
+    "category": "신체",
+    "description": "인간의 손을 나타내며 행동과 창조를 상징하는 글자",
+    "example": "행동, 창조, 일을 표현하는 데 사용되었습니다.",
+    "image": "yod.png"
+  }
+]

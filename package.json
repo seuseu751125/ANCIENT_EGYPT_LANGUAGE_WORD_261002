@@ -1,0 +1,20 @@
+{
+  "name": "ancient-egypt-language-word",
+  "version": "1.0.0",
+  "description": "고대 이집트 상형문자 학습 교육 프로그램",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node tests/app.test.js",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "ancient-egypt",
+    "hieroglyphs",
+    "learning",
+    "education"
+  ],
+  "author": "Egyptian Learning Project",
+  "license": "MIT",
+  "devDependencies": {}
+}

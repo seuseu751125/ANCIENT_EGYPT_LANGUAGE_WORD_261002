@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고대 이집트 상형문자 학습 프로그램</title>
+    <link rel="stylesheet" href="../public/styles/style.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <h1>🏛️ 고대 이집트 상형문자 학습</h1>
+            <p class="subtitle">고대 이집트의 신비로운 글자를 배워보세요</p>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="container">
+        <!-- 네비게이션 메뉴 -->
+        <nav class="nav-menu">
+            <button class="nav-btn active" data-tab="learn">📚 학습</button>
+            <button class="nav-btn" data-tab="quiz">🎮 퀴즈</button>
+            <button class="nav-btn" data-tab="progress">📊 진행률</button>
+        </nav>
+
+        <!-- 학습 탭 -->
+        <section id="learn" class="tab-content active">
+            <h2>글자 학습</h2>
+
+            <!-- 카테고리 필터 -->
+            <div class="filter-section">
+                <label for="category-filter">카테고리:</label>
+                <select id="category-filter">
+                    <option value="all">전체</option>
+                    <option value="동물">동물</option>
+                    <option value="신체">신체</option>
+                    <option value="건축">건축</option>
+                    <option value="도구">도구</option>
+                    <option value="음식">음식</option>
+                    <option value="개념">개념</option>
+                </select>
+            </div>
+
+            <!-- 글자 카드 목록 -->
+            <div id="hieroglyphs-list" class="hieroglyphs-grid">
+                <!-- JavaScript로 동적으로 생성됨 -->
+            </div>
+        </section>
+
+        <!-- 퀴즈 탭 -->
+        <section id="quiz" class="tab-content">
+            <h2>퀴즈 풀기</h2>
+            <div id="quiz-container" class="quiz-container">
+                <!-- JavaScript로 동적으로 생성됨 -->
+            </div>
+        </section>
+
+        <!-- 진행률 탭 -->
+        <section id="progress" class="tab-content">
+            <h2>학습 진행률</h2>
+            <div class="progress-section">
+                <div class="progress-stat">
+                    <p>학습한 글자:</p>
+                    <p class="progress-number" id="learned-count">0</p>
+                </div>
+                <div class="progress-stat">
+                    <p>퀴즈 정답률:</p>
+                    <p class="progress-number" id="quiz-accuracy">0%</p>
+                </div>
+                <div class="progress-stat">
+                    <p>총 점수:</p>
+                    <p class="progress-number" id="total-score">0</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2024 고대 이집트 상형문자 학습 프로젝트</p>
+    </footer>
+
+    <!-- JavaScript 파일 임포트 -->
+    <script src="../src/utils.js"></script>
+    <script src="../src/app.js"></script>
+</body>
+</html>

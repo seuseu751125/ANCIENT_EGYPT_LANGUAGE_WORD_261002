@@ -208,7 +208,12 @@ function createHieroglyphCard(glyph) {
     card.innerHTML = `
         <div class="card-image">${imageEmoji[glyph.category] || '📜'}</div>
         <div class="card-content">
-            <h3>${glyph.name}</h3>
+            <div class="card-header">
+                <h3>${glyph.name}</h3>
+                <button class="speech-btn" data-glyph-id="${glyph.id}" title="발음 듣기">
+                    <span class="speech-icon">🔊</span>
+                </button>
+            </div>
             <span class="category">${glyph.category}</span>
             ${isLearned ? '<span class="learned-badge">✓ 학습함</span>' : ''}
             <p><strong>의미:</strong> ${glyph.meaning}</p>
@@ -218,6 +223,34 @@ function createHieroglyphCard(glyph) {
             ${historicalHTML}
         </div>
     `;
+
+    // 음성 버튼 클릭 처리
+    const speechBtn = card.querySelector('.speech-btn');
+    if (speechBtn) {
+        speechBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 카드 클릭 이벤트 버블링 방지
+            const icon = speechBtn.querySelector('.speech-icon');
+
+            // 이미 재생 중이면 정지
+            if (speechBtn.classList.contains('playing')) {
+                stopSpeech();
+                speechBtn.classList.remove('playing');
+                icon.textContent = '🔊';
+            } else {
+                // 음성 재생
+                speakGlyph(glyph,
+                    () => {
+                        speechBtn.classList.add('playing');
+                        icon.textContent = '⏸️';
+                    },
+                    () => {
+                        speechBtn.classList.remove('playing');
+                        icon.textContent = '🔊';
+                    }
+                );
+            }
+        });
+    }
 
     // 카드 클릭 시 학습 마크
     card.addEventListener('click', () => {

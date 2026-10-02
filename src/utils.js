@@ -426,3 +426,79 @@ function getMaxStreak(quizAttempts) {
 
     return maxStreak;
 }
+
+// ========== 음성 합성 시스템 ==========
+
+/**
+ * 현재 재생 중인 음성 (중지 함수 호출 시 사용)
+ */
+let currentSpeech = null;
+
+/**
+ * 글자의 발음을 음성으로 재생
+ * @param {object} glyph - 글자 데이터
+ * @param {Function} onStart - 재생 시작 콜백
+ * @param {Function} onEnd - 재생 종료 콜백
+ */
+function speakGlyph(glyph, onStart = null, onEnd = null) {
+    // 브라우저가 SpeechSynthesis를 지원하는지 확인
+    const synth = window.speechSynthesis;
+    if (!synth) {
+        logWarning('이 브라우저는 음성 합성을 지원하지 않습니다.');
+        return;
+    }
+
+    // 이미 재생 중인 음성이 있으면 취소
+    if (currentSpeech) {
+        synth.cancel();
+        currentSpeech = null;
+    }
+
+    // 재생할 텍스트 구성
+    const textToSpeak = `${glyph.name}. 발음: ${glyph.pronunciation}`;
+
+    // SpeechSynthesisUtterance 객체 생성
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    // 음성 설정
+    utterance.lang = 'ko-KR'; // 한국어
+    utterance.rate = 0.9; // 재생 속도 (0.1 ~ 10)
+    utterance.pitch = 1.0; // 음정 (0.1 ~ 2.0)
+    utterance.volume = 1.0; // 음량 (0.0 ~ 1.0)
+
+    // 재생 시작 콜백
+    utterance.onstart = () => {
+        currentSpeech = utterance;
+        if (onStart) onStart();
+        logSuccess(`${glyph.name} 음성 재생 시작`);
+    };
+
+    // 재생 종료 콜백
+    utterance.onend = () => {
+        currentSpeech = null;
+        if (onEnd) onEnd();
+        logSuccess(`${glyph.name} 음성 재생 완료`);
+    };
+
+    // 오류 처리
+    utterance.onerror = (event) => {
+        currentSpeech = null;
+        logError(`음성 재생 오류: ${event.error}`);
+        if (onEnd) onEnd();
+    };
+
+    // 음성 재생 시작
+    synth.speak(utterance);
+}
+
+/**
+ * 현재 재생 중인 음성 정지
+ */
+function stopSpeech() {
+    const synth = window.speechSynthesis;
+    if (synth && currentSpeech) {
+        synth.cancel();
+        currentSpeech = null;
+        logSuccess('음성 재생이 정지되었습니다.');
+    }
+}

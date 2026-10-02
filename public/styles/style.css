@@ -97,31 +97,70 @@ header.header .subtitle {
 /* ========== 필터 섹션 ========== */
 .filter-section {
     margin-bottom: 30px;
-    padding: 15px;
+    padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .filter-section label {
     font-weight: 600;
-    margin-right: 10px;
     color: #8B4513;
+    font-size: 1em;
 }
 
 .filter-section select {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 1em;
+    font-size: 0.95em;
     cursor: pointer;
     background-color: white;
+    min-width: 150px;
 }
 
 .filter-section select:focus {
     outline: none;
     border-color: #8B4513;
     box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+}
+
+/* ========== 난이도 버튼 ========== */
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.difficulty-btn {
+    padding: 8px 16px;
+    border: 2px solid #ddd;
+    background-color: white;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.difficulty-btn:hover {
+    border-color: #8B4513;
+    background-color: #f9f5f0;
+}
+
+.difficulty-btn.active {
+    border-color: #8B4513;
+    background-color: #8B4513;
+    color: white;
 }
 
 /* ========== 글자 카드 그리드 ========== */
@@ -331,6 +370,171 @@ header.header .subtitle {
     font-size: 2.5em;
     color: #8B4513;
     font-weight: 700;
+}
+
+/* ========== 프로필 페이지 ========== */
+.profile-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #D2B48C;
+}
+
+.profile-header h3 {
+    color: #8B4513;
+    font-size: 1.5em;
+}
+
+.profile-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.profile-stat-card {
+    background: linear-gradient(135deg, #8B4513 0%, #D2B48C 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+}
+
+.profile-stat-card h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.95em;
+    opacity: 0.95;
+}
+
+.stat-value {
+    font-size: 2em;
+    font-weight: 700;
+    margin: 0;
+}
+
+.profile-difficulty-section {
+    margin-bottom: 40px;
+}
+
+.profile-difficulty-section h3 {
+    color: #8B4513;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #D2B48C;
+    padding-bottom: 10px;
+}
+
+.difficulty-stats {
+    display: grid;
+    gap: 25px;
+}
+
+.difficulty-stat {
+    background-color: #f9f5f0;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #D2B48C;
+}
+
+.difficulty-stat h4 {
+    color: #8B4513;
+    margin: 0 0 15px 0;
+    font-size: 1.1em;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 25px;
+    background-color: #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8B4513 0%, #D2B48C 100%);
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8em;
+}
+
+.progress-text {
+    text-align: right;
+    color: #666;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.profile-category-section {
+    margin-bottom: 30px;
+}
+
+.profile-category-section h3 {
+    color: #8B4513;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #D2B48C;
+    padding-bottom: 10px;
+}
+
+.category-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.category-stat-item {
+    background-color: #f9f5f0;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #D2B48C;
+}
+
+.category-stat-item h5 {
+    color: #8B4513;
+    margin: 0 0 10px 0;
+    font-size: 0.95em;
+}
+
+.category-stat-item p {
+    color: #666;
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.profile-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.action-btn {
+    padding: 12px 30px;
+    background-color: #D2691E;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #8B4513;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
 /* ========== 푸터 ========== */

@@ -22,24 +22,37 @@
             <button class="nav-btn active" data-tab="learn">📚 학습</button>
             <button class="nav-btn" data-tab="quiz">🎮 퀴즈</button>
             <button class="nav-btn" data-tab="progress">📊 진행률</button>
+            <button class="nav-btn" data-tab="profile">👤 프로필</button>
         </nav>
 
         <!-- 학습 탭 -->
         <section id="learn" class="tab-content active">
             <h2>글자 학습</h2>
 
-            <!-- 카테고리 필터 -->
+            <!-- 필터 섹션 -->
             <div class="filter-section">
-                <label for="category-filter">카테고리:</label>
-                <select id="category-filter">
-                    <option value="all">전체</option>
-                    <option value="동물">동물</option>
-                    <option value="신체">신체</option>
-                    <option value="건축">건축</option>
-                    <option value="도구">도구</option>
-                    <option value="음식">음식</option>
-                    <option value="개념">개념</option>
-                </select>
+                <div class="filter-group">
+                    <label for="category-filter">📂 카테고리:</label>
+                    <select id="category-filter">
+                        <option value="all">전체</option>
+                        <option value="동물">동물</option>
+                        <option value="신체">신체</option>
+                        <option value="건축">건축</option>
+                        <option value="도구">도구</option>
+                        <option value="음식">음식</option>
+                        <option value="개념">개념</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>🎯 난이도:</label>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn active" data-difficulty="all">전체</button>
+                        <button class="difficulty-btn" data-difficulty="초급">초급</button>
+                        <button class="difficulty-btn" data-difficulty="중급">중급</button>
+                        <button class="difficulty-btn" data-difficulty="고급">고급</button>
+                    </div>
+                </div>
             </div>
 
             <!-- 글자 카드 목록 -->
@@ -71,6 +84,73 @@
                 <div class="progress-stat">
                     <p>총 점수:</p>
                     <p class="progress-number" id="total-score">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 프로필 탭 -->
+        <section id="profile" class="tab-content">
+            <h2>👤 사용자 프로필</h2>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <h3>학습자 정보</h3>
+                </div>
+
+                <div class="profile-stats-grid">
+                    <div class="profile-stat-card">
+                        <h4>📚 총 학습 글자</h4>
+                        <p class="stat-value" id="profile-total-learned">0개</p>
+                    </div>
+                    <div class="profile-stat-card">
+                        <h4>✅ 퀴즈 정답</h4>
+                        <p class="stat-value" id="profile-correct-answers">0개</p>
+                    </div>
+                    <div class="profile-stat-card">
+                        <h4>📝 퀴즈 시도</h4>
+                        <p class="stat-value" id="profile-quiz-attempts">0회</p>
+                    </div>
+                    <div class="profile-stat-card">
+                        <h4>🏆 누적 점수</h4>
+                        <p class="stat-value" id="profile-total-points">0점</p>
+                    </div>
+                </div>
+
+                <div class="profile-difficulty-section">
+                    <h3>난이도별 학습 현황</h3>
+                    <div class="difficulty-stats">
+                        <div class="difficulty-stat">
+                            <h4>초급</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-beginner"></div>
+                            </div>
+                            <p class="progress-text" id="progress-beginner-text">0/10</p>
+                        </div>
+                        <div class="difficulty-stat">
+                            <h4>중급</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-intermediate"></div>
+                            </div>
+                            <p class="progress-text" id="progress-intermediate-text">0/10</p>
+                        </div>
+                        <div class="difficulty-stat">
+                            <h4>고급</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-advanced"></div>
+                            </div>
+                            <p class="progress-text" id="progress-advanced-text">0/10</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-category-section">
+                    <h3>카테고리별 학습 현황</h3>
+                    <div class="category-stats" id="category-stats">
+                        <!-- JavaScript로 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="action-btn" onclick="resetAllProgress()">🔄 진행 상황 초기화</button>
                 </div>
             </div>
         </section>

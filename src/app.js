@@ -8,6 +8,7 @@ let hieroglyphs = [];
 let currentQuizIndex = 0;
 let quizData = [];
 let currentHieroglyphFilter = 'all';
+let currentDifficultyFilter = 'all';
 
 // ========== 초기화 함수 ==========
 
@@ -73,6 +74,12 @@ function setupEventListeners() {
         categoryFilter.addEventListener('change', handleCategoryFilterChange);
     }
 
+    // 난이도 버튼 클릭 이벤트
+    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+    difficultyButtons.forEach(button => {
+        button.addEventListener('click', handleDifficultyFilterChange);
+    });
+
     logSuccess('이벤트 리스너 설정 완료');
 }
 
@@ -111,6 +118,23 @@ function handleCategoryFilterChange(event) {
     displayHieroglyphs();
 }
 
+/**
+ * 난이도 필터 변경 처리
+ * @param {Event} event - 클릭 이벤트
+ */
+function handleDifficultyFilterChange(event) {
+    const difficulty = event.target.dataset.difficulty;
+    currentDifficultyFilter = difficulty;
+
+    // 활성화 상태 업데이트
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    displayHieroglyphs();
+}
+
 // ========== 학습 탭 함수 ==========
 
 /**
@@ -123,13 +147,25 @@ function displayHieroglyphs() {
     // 필터링
     let filteredGlyphs = hieroglyphs;
     if (currentHieroglyphFilter !== 'all') {
-        filteredGlyphs = hieroglyphs.filter(glyph =>
+        filteredGlyphs = filteredGlyphs.filter(glyph =>
             glyph.category === currentHieroglyphFilter
+        );
+    }
+
+    // 난이도 필터
+    if (currentDifficultyFilter !== 'all') {
+        filteredGlyphs = filteredGlyphs.filter(glyph =>
+            glyph.difficulty === currentDifficultyFilter
         );
     }
 
     // 컨테이너 초기화
     container.innerHTML = '';
+
+    if (filteredGlyphs.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">조건에 맞는 글자가 없습니다.</p>';
+        return;
+    }
 
     // 글자 카드 생성
     filteredGlyphs.forEach(glyph => {
@@ -381,4 +417,96 @@ function resetAllProgress() {
 function printProgressInfo() {
     const progress = getUserProgress();
     console.table(progress);
+}
+
+// ========== 프로필 페이지 함수 ==========
+
+/**
+ * 프로필 페이지 업데이트
+ */
+function updateProfilePage() {
+    const progress = getUserProgress();
+    const stats = calculateStatistics(hieroglyphs);
+
+    // 기본 통계 업데이트
+    const totalLearnedEl = document.getElementById('profile-total-learned');
+    const correctAnswersEl = document.getElementById('profile-correct-answers');
+    const quizAttemptsEl = document.getElementById('profile-quiz-attempts');
+    const totalPointsEl = document.getElementById('profile-total-points');
+
+    if (totalLearnedEl) totalLearnedEl.textContent = `${stats.learnedCount}개`;
+    if (correctAnswersEl) correctAnswersEl.textContent = `${stats.correctAnswers}개`;
+    if (quizAttemptsEl) quizAttemptsEl.textContent = `${stats.quizAttempts}회`;
+    if (totalPointsEl) totalPointsEl.textContent = `${stats.totalScore}점`;
+
+    // 난이도별 진행률 업데이트
+    updateDifficultyProgress();
+
+    // 카테고리별 진행률 업데이트
+    updateCategoryProgress();
+}
+
+/**
+ * 난이도별 학습 진행률 업데이트
+ */
+function updateDifficultyProgress() {
+    const progress = getUserProgress();
+
+    const difficulties = [
+        { key: 'beginner', label: '초급', difficulty: '초급' },
+        { key: 'intermediate', label: '중급', difficulty: '중급' },
+        { key: 'advanced', label: '고급', difficulty: '고급' }
+    ];
+
+    difficulties.forEach(diff => {
+        const totalInDifficulty = hieroglyphs.filter(g => g.difficulty === diff.difficulty).length;
+        const learnedInDifficulty = progress.learnedHieroglyphs.filter(id => {
+            const glyph = hieroglyphs.find(g => g.id === id);
+            return glyph && glyph.difficulty === diff.difficulty;
+        }).length;
+
+        const percentage = totalInDifficulty > 0 ? (learnedInDifficulty / totalInDifficulty) * 100 : 0;
+
+        // 진행 바 업데이트
+        const progressFill = document.getElementById(`progress-${diff.key}`);
+        if (progressFill) {
+            progressFill.style.width = percentage + '%';
+        }
+
+        // 텍스트 업데이트
+        const progressText = document.getElementById(`progress-${diff.key}-text`);
+        if (progressText) {
+            progressText.textContent = `${learnedInDifficulty}/${totalInDifficulty}`;
+        }
+    });
+}
+
+/**
+ * 카테고리별 학습 진행률 업데이트
+ */
+function updateCategoryProgress() {
+    const progress = getUserProgress();
+    const categoryStatsEl = document.getElementById('category-stats');
+
+    if (!categoryStatsEl) return;
+
+    const categories = ['동물', '신체', '건축', '도구', '음식', '개념'];
+    let html = '';
+
+    categories.forEach(category => {
+        const totalInCategory = hieroglyphs.filter(g => g.category === category).length;
+        const learnedInCategory = progress.learnedHieroglyphs.filter(id => {
+            const glyph = hieroglyphs.find(g => g.id === id);
+            return glyph && glyph.category === category;
+        }).length;
+
+        html += `
+            <div class="category-stat-item">
+                <h5>${category}</h5>
+                <p>${learnedInCategory}/${totalInCategory}</p>
+            </div>
+        `;
+    });
+
+    categoryStatsEl.innerHTML = html;
 }

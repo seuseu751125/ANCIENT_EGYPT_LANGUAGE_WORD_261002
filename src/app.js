@@ -109,6 +109,12 @@ function handleTabClick(event) {
         prepareQuizData();
     }
 
+    // 진행률 탭 클릭 시 차트 업데이트
+    if (tabName === 'progress') {
+        // 차트가 렌더링될 시간을 주기 위해 약간의 지연
+        setTimeout(updateAllCharts, 100);
+    }
+
     // 프로필 탭 클릭 시 프로필 정보 업데이트
     if (tabName === 'profile') {
         updateProfilePage();
@@ -608,4 +614,242 @@ function updateStreakDisplay() {
     if (maxStreakEl) {
         maxStreakEl.textContent = maxStreak;
     }
+}
+
+// ========== 차트 시스템 ==========
+
+/**
+ * 차트 레퍼런스 객체 (재생성 방지)
+ */
+let charts = {
+    attemptsTrend: null,
+    category: null,
+    difficulty: null
+};
+
+/**
+ * 퀴즈 시도 추이 차트 업데이트/생성
+ */
+function updateAttemptsTrendChart() {
+    const canvas = document.getElementById('attemptsTrendChart');
+    if (!canvas) return;
+
+    const progress = getUserProgress();
+    const ctx = canvas.getContext('2d');
+
+    // 데이터 준비: 최근 20개 퀴즈 시도
+    const recentAttempts = progress.quizAttempts.slice(-20);
+    const cumulativeCorrect = [];
+    let correctCount = 0;
+
+    recentAttempts.forEach(attempt => {
+        if (attempt.correct) correctCount++;
+        cumulativeCorrect.push(correctCount);
+    });
+
+    const labels = recentAttempts.map((_, i) => `${i + 1}`);
+
+    // 기존 차트 제거
+    if (charts.attemptsTrend) {
+        charts.attemptsTrend.destroy();
+    }
+
+    // 새 차트 생성
+    charts.attemptsTrend = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '누적 정답 수',
+                data: cumulativeCorrect,
+                borderColor: '#8B4513',
+                backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: '#8B4513',
+                pointBorderColor: '#FFF',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#666',
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#666' },
+                    grid: { color: '#e0e0e0' }
+                },
+                x: {
+                    ticks: { color: '#666' },
+                    grid: { color: '#e0e0e0' }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 카테고리별 학습 비율 차트 업데이트/생성
+ */
+function updateCategoryChart() {
+    const canvas = document.getElementById('categoryChart');
+    if (!canvas) return;
+
+    const progress = getUserProgress();
+    const ctx = canvas.getContext('2d');
+    const categories = ['동물', '신체', '건축', '도구', '음식', '개념'];
+
+    // 카테고리별 학습 수 계산
+    const categoryData = categories.map(category => {
+        return progress.learnedHieroglyphs.filter(id => {
+            const glyph = hieroglyphs.find(g => g.id === id);
+            return glyph && glyph.category === category;
+        }).length;
+    });
+
+    const categoryColors = [
+        '#FF6B6B', // 동물 - 빨강
+        '#4ECDC4', // 신체 - 청록
+        '#45B7D1', // 건축 - 파랑
+        '#FFA07A', // 도구 - 라이트 연어
+        '#98D8C8', // 음식 - 민트
+        '#F7DC6F'  // 개념 - 노랑
+    ];
+
+    // 기존 차트 제거
+    if (charts.category) {
+        charts.category.destroy();
+    }
+
+    // 새 차트 생성
+    charts.category = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: categoryData,
+                backgroundColor: categoryColors,
+                borderColor: '#FFF',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#666',
+                        font: { size: 12 },
+                        padding: 15
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 난이도별 완성도 차트 업데이트/생성
+ */
+function updateDifficultyChart() {
+    const canvas = document.getElementById('difficultyChart');
+    if (!canvas) return;
+
+    const progress = getUserProgress();
+    const ctx = canvas.getContext('2d');
+    const difficulties = ['초급', '중급', '고급'];
+
+    // 난이도별 완성도 계산
+    const difficultyData = difficulties.map(difficulty => {
+        const total = hieroglyphs.filter(g => g.difficulty === difficulty).length;
+        const learned = progress.learnedHieroglyphs.filter(id => {
+            const glyph = hieroglyphs.find(g => g.id === id);
+            return glyph && glyph.difficulty === difficulty;
+        }).length;
+        return total > 0 ? Math.round((learned / total) * 100) : 0;
+    });
+
+    // 기존 차트 제거
+    if (charts.difficulty) {
+        charts.difficulty.destroy();
+    }
+
+    // 새 차트 생성
+    charts.difficulty = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: difficulties,
+            datasets: [{
+                label: '완성도 (%)',
+                data: difficultyData,
+                backgroundColor: [
+                    '#90EE90', // 초급 - 연두
+                    '#FFD700', // 중급 - 금색
+                    '#FF6B6B'  // 고급 - 빨강
+                ],
+                borderColor: [
+                    '#228B22',
+                    '#DAA520',
+                    '#DC143C'
+                ],
+                borderWidth: 2,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'x',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#666',
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#666',
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    },
+                    grid: { color: '#e0e0e0' }
+                },
+                x: {
+                    ticks: { color: '#666' },
+                    grid: { color: '#e0e0e0' }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 모든 차트 업데이트
+ */
+function updateAllCharts() {
+    updateAttemptsTrendChart();
+    updateCategoryChart();
+    updateDifficultyChart();
+    logSuccess('모든 차트가 업데이트되었습니다.');
 }

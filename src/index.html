@@ -71,7 +71,9 @@
 
         <!-- 진행률 탭 -->
         <section id="progress" class="tab-content">
-            <h2>학습 진행률</h2>
+            <h2>📊 학습 진행률 대시보드</h2>
+
+            <!-- 통계 카드 -->
             <div class="progress-section">
                 <div class="progress-stat">
                     <p>학습한 글자:</p>
@@ -84,6 +86,27 @@
                 <div class="progress-stat">
                     <p>총 점수:</p>
                     <p class="progress-number" id="total-score">0</p>
+                </div>
+            </div>
+
+            <!-- 차트 섹션 -->
+            <div class="charts-section">
+                <!-- 퀴즈 시도 추이 차트 -->
+                <div class="chart-container">
+                    <h3>📈 퀴즈 시도 추이</h3>
+                    <canvas id="attemptsTrendChart"></canvas>
+                </div>
+
+                <!-- 카테고리별 학습 비율 -->
+                <div class="chart-container">
+                    <h3>🥧 카테고리별 학습 비율</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+
+                <!-- 난이도별 완성도 -->
+                <div class="chart-container">
+                    <h3>📊 난이도별 완성도</h3>
+                    <canvas id="difficultyChart"></canvas>
                 </div>
             </div>
         </section>
@@ -188,6 +211,9 @@
     </footer>
 
     <!-- JavaScript 파일 임포트 -->
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <script src="../src/utils.js"></script>
     <script src="../src/app.js"></script>
 </body>

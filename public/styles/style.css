@@ -421,6 +421,56 @@ header.header .subtitle {
     font-weight: 700;
 }
 
+/* ========== 차트 섹션 ========== */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+.chart-container {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.chart-container h3 {
+    color: #8B4513;
+    margin: 0 0 20px 0;
+    font-size: 1.1em;
+    border-bottom: 2px solid #D2B48C;
+    padding-bottom: 10px;
+}
+
+.chart-container canvas {
+    max-height: 300px;
+}
+
+/* 반응형 차트 레이아웃 */
+@media (max-width: 768px) {
+    .charts-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .chart-container {
+        padding: 15px;
+    }
+
+    .chart-container canvas {
+        max-height: 250px;
+    }
+}
+
 /* ========== 프로필 페이지 ========== */
 .profile-container {
     background-color: white;
